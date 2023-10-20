@@ -24,13 +24,8 @@ function createShip(name, length, hits, sunk) {
     return ship;
   }
   
-  const aircraftCarrier = createShip('Aircraft Carrier', 5, 0, 'No');
-  
-  console.log(aircraftCarrier.name, aircraftCarrier.length, aircraftCarrier.hits, aircraftCarrier.sunk);
-  
-  aircraftCarrier.hit();
-  // adds hit to ship 
-  
-  aircraftCarrier.isSunk();
-  // checks if ship is sunk and returns sunk if it is 
+
+  module.exports = {
+	createShip: createShip,
+};
   
