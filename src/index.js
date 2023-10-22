@@ -56,7 +56,7 @@ function placeShip(ship) {
 		const y = parseInt(prompt(`Enter the starting Y coordinate for ${shipName} (1-10):`));
 
 		if (xCoordinates.includes(x) && y >= 1 && y <= 10) {
-			const isHorizontal = confirm(`Place ${shipName} horizontally? Click OK for Yes, Cancel for No.`);
+			const isHorizontal = confirm(`Place ${shipName} vertically? Click OK for Yes, Cancel for No.`);
 
 			if (isHorizontal) {
 				// Check if the ship fits horizontally and if the coordinates are available
@@ -70,7 +70,7 @@ function placeShip(ship) {
 					}
 					break;
 				} else {
-					alert(`${shipName} doesn't fit at this location horizontally or the coordinates are occupied. Please choose a different starting coordinate.`);
+					alert(`${shipName} doesn't fit at this location vertically or the coordinates are occupied. Please choose a different starting coordinate.`);
 				}
 			} else {
 				// Check if the ship fits vertically and if the coordinates are available
@@ -84,7 +84,7 @@ function placeShip(ship) {
 					}
 					break;
 				} else {
-					alert(`${shipName} doesn't fit at this location vertically or the coordinates are occupied. Please choose a different starting coordinate.`);
+					alert(`${shipName} doesn't fit at this location horizontally or the coordinates are occupied. Please choose a different starting coordinate.`);
 				}
 			}
 		} else {
