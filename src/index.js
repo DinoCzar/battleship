@@ -132,6 +132,8 @@ placeShip(submarine);
 placeShip(patrolBoat);
 
 function receiveAttack(x, y) {
+	let hit = false; // A flag to track if the attack hits any ship
+
 	for (const location of coordinates) {
 		if (location.x === x && location.y === y) {
 			if (location.attacked === 'yes') {
@@ -142,6 +144,7 @@ function receiveAttack(x, y) {
 			location.attacked = 'yes';
 
 			if (location.boat !== 'none') {
+				hit = true; // The attack hits a ship
 				// Find the corresponding ship by name and add a hit
 				switch (location.boat) {
 					case 'Aircraft Carrier':
@@ -165,10 +168,12 @@ function receiveAttack(x, y) {
 						patrolBoat.isSunk();
 						break;
 				}
-			} else {
-				alert("It's a miss!");
 			}
 		}
+	}
+
+	if (!hit) {
+		alert("It's a miss!"); // Display the "It's a miss" alert only when there is no hit
 	}
 }
 
