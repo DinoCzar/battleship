@@ -146,6 +146,10 @@ function receiveAttack(x, y) {
 			if (location.boat !== 'none') {
 				hit = true; // The attack hits a ship
 				// Find the corresponding ship by name and add a hit
+                // Change the background color to red when a ship is hit
+				const div = document.getElementById(x + y);
+				div.style.backgroundColor = 'red';
+
 				switch (location.boat) {
 					case 'Aircraft Carrier':
 						aircraftCarrier.hit();
@@ -173,9 +177,13 @@ function receiveAttack(x, y) {
 	}
 
 	if (!hit) {
-		alert("It's a miss!"); // Display the "It's a miss" alert only when there is no hit
+		// Display the "It's a miss!" alert and change the background color to grey for misses
+		alert("It's a miss!");
+		const div = document.getElementById(x + y);
+		div.style.backgroundColor = 'grey';
 	}
 }
+
 
 // Nested for loop to create objects and div elements for every combination of 'x' and 'y'
 for (const x of xCoordinates) {
@@ -197,9 +205,6 @@ for (const x of xCoordinates) {
 			}
 
 			receiveAttack(x, y);
-			// Change the background color to red when the div is clicked
-			div.style.backgroundColor = 'red';
-			// You can add more logic here to handle the attack on the ship, mark hits, etc.
 		});
 
 		// Append the div to the document or another container
