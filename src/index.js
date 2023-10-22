@@ -24,18 +24,18 @@ function createShip(name, length, hits, sunk) {
 	return ship;
 }
 
-createShip('Aircraft Carrier', 5, 0, 'No');
-createShip('Battleship', 4, 0, 'No');
-createShip('Destroyer', 4, 0, 'No');
-createShip('Submarine', 3, 0, 'No');
-createShip('Patrol Boat', 2, 0, 'No');
+const aircraftCarrier = createShip('Aircraft Carrier', 5, 0, 'No');
+const battleship = createShip('Battleship', 4, 0, 'No');
+const destroyer = createShip('Destroyer', 4, 0, 'No');
+const submarine = createShip('Submarine', 3, 0, 'No');
+const patrolBoat = createShip('Patrol Boat', 2, 0, 'No');
 
 function gameBoard(x, y, boat) {
 	return {
 		x: x,
 		y: y,
-		boat: boat,
-		attacked: false,
+		boat: 'none',
+		attacked: 'no',
 	};
 }
 
@@ -46,6 +46,40 @@ const yCoordinates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // Array to store the created objects
 const coordinates = [];
 
+function receiveAttack(x, y) {
+	for (const location of coordinates) {
+		if (location.x === x && location.y === y) {
+			if (location.boat === 'none') {
+				location.attacked = 'yes';
+			} else {
+				// Find the corresponding ship by name and add a hit
+				switch (location.boat) {
+					case 'Aircraft Carrier':
+						aircraftCarrier.hit();
+                        aircraftCarrier.isSunk();
+						break;
+					case 'Battleship':
+						battleship.hit();
+                        battleship.isSunk();
+						break;
+					case 'Destroyer':
+						destroyer.hit();
+                        destroyer.isSunk();
+						break;
+					case 'Submarine':
+						submarine.hit();
+                        submarine.isSunk();
+						break;
+					case 'Patrol Boat':
+						patrolBoat.hit();
+                        patrolBoat.isSunk();
+						break;
+				}
+			}
+		}
+	}
+}
+
 // Nested for loop to create objects and div elements for every combination of 'x' and 'y'
 for (const x of xCoordinates) {
 	for (const y of yCoordinates) {
@@ -53,16 +87,24 @@ for (const x of xCoordinates) {
 		const location = gameBoard(x, y, 'none');
 		coordinates.push(location);
 
-        const container = document.querySelector('#container');
+		const container = document.querySelector('#container');
 
 		// Create a div element with ID of x+y
 		const div = document.createElement('div');
 		div.id = x + y;
 		div.classList.add('grid'); // Add the CSS class 'grid' to the div
 
-		div.classList.add(y); // Add a class based on 'y' value to the div
-		// You can append additional content or properties to the div if needed
-		// For example, div.textContent = 'Some text';
+		div.addEventListener('click', function () {
+			if (location.attacked === 'yes') {
+				// If the location has already been attacked, do nothing
+				return;
+			}
+
+			receiveAttack(x, y);
+			// Change the background color to red when the div is clicked
+			div.style.backgroundColor = 'red';
+			// You can add more logic here to handle the attack on the ship, mark hits, etc.
+		});
 
 		// Append the div to the document or another container
 		container.appendChild(div);
@@ -71,7 +113,6 @@ for (const x of xCoordinates) {
 
 // Now, the 'objects' array contains objects for every combination of 'x' and 'y',
 // and there is a corresponding div element with an ID for each combination.
-console.log(coordinates);
 
 module.exports = {
 	createShip: createShip,
