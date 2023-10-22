@@ -12,11 +12,13 @@ function createShip(name, length, hits, sunk) {
 	// Define a method for the object
 	ship.hit = function () {
 		ship.hits += 1;
+        alert(capitalizeFirstLetter(ship.name) + ' has been hit!');
 	};
 
 	ship.isSunk = function () {
 		if (ship.hits === ship.length) {
 			ship.sunk = 'Yes';
+            alert(capitalizeFirstLetter(ship.name) + ' has been sunk!');
 		}
 	};
 
