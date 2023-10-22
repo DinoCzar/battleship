@@ -1,0 +1,17 @@
+.grid {
+    border: solid;
+    border-width: 1px;
+    width: 30px;
+    height: 30px;
+}
+
+.a {
+    background-color: red;
+}
+
+#container {
+    margin: 30px;
+    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+}
