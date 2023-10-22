@@ -3,7 +3,6 @@ function createShip(name, length, hits, sunk) {
 	const ship = {};
 
 	// Assign properties to the object
-
 	ship.name = name;
 	ship.length = length;
 	ship.hits = hits;
@@ -12,13 +11,13 @@ function createShip(name, length, hits, sunk) {
 	// Define a method for the object
 	ship.hit = function () {
 		ship.hits += 1;
-        alert((ship.name) + ' has been hit!');
+		alert(ship.name + ' has been hit!');
 	};
 
 	ship.isSunk = function () {
 		if (ship.hits === ship.length) {
 			ship.sunk = 'Yes';
-            alert((ship.name) + ' has been sunk!');
+			alert(ship.name + ' has been sunk!');
 		}
 	};
 
@@ -48,52 +47,112 @@ const yCoordinates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // Array to store the created objects
 const coordinates = [];
 
+// Function to prompt the user for ship placement
+function placeShip(ship) {
+	const shipName = ship.name;
+	const shipLength = ship.length;
+
+	while (true) {
+		const x = prompt(`Enter the starting X coordinate for ${shipName} (A-J):`);
+		const y = parseInt(prompt(`Enter the starting Y coordinate for ${shipName} (1-10):`));
+
+		if (xCoordinates.includes(x) && y >= 1 && y <= 10) {
+			const isHorizontal = confirm(`Place ${shipName} horizontally? Click OK for Yes, Cancel for No.`);
+
+			if (isHorizontal) {
+				// Check if the ship fits horizontally
+				if (xCoordinates.indexOf(x) + shipLength <= 10) {
+					// Place the ship horizontally
+					for (let i = 0; i < shipLength; i++) {
+						const shipX = xCoordinates[xCoordinates.indexOf(x) + i];
+						const shipY = y;
+						const shipLocation = coordinates.find(loc => loc.x === shipX && loc.y === shipY);
+						shipLocation.boat = shipName;
+					}
+					break;
+				} else {
+					alert(`${shipName} doesn't fit at this location horizontally. Please choose a different starting coordinate.`);
+				}
+			} else {
+				// Check if the ship fits vertically
+				if (y + shipLength - 1 <= 10) {
+					// Place the ship vertically
+					for (let i = 0; i < shipLength; i++) {
+						const shipX = x;
+						const shipY = y + i;
+						const shipLocation = coordinates.find(loc => loc.x === shipX && loc.y === shipY);
+						shipLocation.boat = shipName;
+					}
+					break;
+				} else {
+					alert(`${shipName} doesn't fit at this location vertically. Please choose a different starting coordinate.`);
+				}
+			}
+		} else {
+			alert('Invalid coordinates. Please enter valid coordinates (A-J for X and 1-10 for Y).');
+		}
+	}
+}
+
+// Now, initialize the coordinates array and then prompt the user for ship placement for each ship
+for (const x of xCoordinates) {
+	for (const y of yCoordinates) {
+		const location = gameBoard(x, y, 'none');
+		coordinates.push(location);
+	}
+}
+
+// Prompt the user for ship placement for each ship
+placeShip(aircraftCarrier);
+placeShip(battleship);
+placeShip(destroyer);
+placeShip(submarine);
+placeShip(patrolBoat);
+
 function receiveAttack(x, y) {
-    for (const location of coordinates) {
-        if (location.x === x && location.y === y) {
-            if (location.attacked === 'yes') {
-                // If the location has already been attacked, do nothing
-                return;
-            }
+	for (const location of coordinates) {
+		if (location.x === x && location.y === y) {
+			if (location.attacked === 'yes') {
+				// If the location has already been attacked, do nothing
+				return;
+			}
 
-            location.attacked = 'yes';
+			location.attacked = 'yes';
 
-            if (location.boat !== 'none') {
-                // Find the corresponding ship by name and add a hit
-                switch (location.boat) {
-                    case 'Aircraft Carrier':
-                        aircraftCarrier.hit();
-                        aircraftCarrier.isSunk();
-                        break;
-                    case 'Battleship':
-                        battleship.hit();
-                        battleship.isSunk();
-                        break;
-                    case 'Destroyer':
-                        destroyer.hit();
-                        destroyer.isSunk();
-                        break;
-                    case 'Submarine':
-                        submarine.hit();
-                        submarine.isSunk();
-                        break;
-                    case 'Patrol Boat':
-                        patrolBoat.hit();
-                        patrolBoat.isSunk();
-                        break;
-                }
-
-            } else {
-                alert("It's a miss!");
-            }
-        }
-    }
+			if (location.boat !== 'none') {
+				// Find the corresponding ship by name and add a hit
+				switch (location.boat) {
+					case 'Aircraft Carrier':
+						aircraftCarrier.hit();
+						aircraftCarrier.isSunk();
+						break;
+					case 'Battleship':
+						battleship.hit();
+						battleship.isSunk();
+						break;
+					case 'Destroyer':
+						destroyer.hit();
+						destroyer.isSunk();
+						break;
+					case 'Submarine':
+						submarine.hit();
+						submarine.isSunk();
+						break;
+					case 'Patrol Boat':
+						patrolBoat.hit();
+						patrolBoat.isSunk();
+						break;
+				}
+			} else {
+				alert("It's a miss!");
+			}
+		}
+	}
 }
 
 // Nested for loop to create objects and div elements for every combination of 'x' and 'y'
 for (const x of xCoordinates) {
 	for (const y of yCoordinates) {
-		const boat = `Boat at ${x}${y}`;
 		const location = gameBoard(x, y, 'none');
 		coordinates.push(location);
 
@@ -121,8 +180,6 @@ for (const x of xCoordinates) {
 	}
 }
 
-// Now, the 'objects' array contains objects for every combination of 'x' and 'y',
-// and there is a corresponding div element with an ID for each combination.
 
 module.exports = {
 	createShip: createShip,
