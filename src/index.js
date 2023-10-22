@@ -47,7 +47,6 @@ const yCoordinates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // Array to store the created objects
 const coordinates = [];
 
-// Function to prompt the user for ship placement
 function placeShip(ship) {
 	const shipName = ship.name;
 	const shipLength = ship.length;
@@ -60,8 +59,8 @@ function placeShip(ship) {
 			const isHorizontal = confirm(`Place ${shipName} horizontally? Click OK for Yes, Cancel for No.`);
 
 			if (isHorizontal) {
-				// Check if the ship fits horizontally
-				if (xCoordinates.indexOf(x) + shipLength <= 10) {
+				// Check if the ship fits horizontally and if the coordinates are available
+				if (xCoordinates.indexOf(x) + shipLength <= 10 && !checkCoordinatesOccupied(x, y, shipLength, true)) {
 					// Place the ship horizontally
 					for (let i = 0; i < shipLength; i++) {
 						const shipX = xCoordinates[xCoordinates.indexOf(x) + i];
@@ -71,11 +70,11 @@ function placeShip(ship) {
 					}
 					break;
 				} else {
-					alert(`${shipName} doesn't fit at this location horizontally. Please choose a different starting coordinate.`);
+					alert(`${shipName} doesn't fit at this location horizontally or the coordinates are occupied. Please choose a different starting coordinate.`);
 				}
 			} else {
-				// Check if the ship fits vertically
-				if (y + shipLength - 1 <= 10) {
+				// Check if the ship fits vertically and if the coordinates are available
+				if (y + shipLength - 1 <= 10 && !checkCoordinatesOccupied(x, y, shipLength, false)) {
 					// Place the ship vertically
 					for (let i = 0; i < shipLength; i++) {
 						const shipX = x;
@@ -85,13 +84,36 @@ function placeShip(ship) {
 					}
 					break;
 				} else {
-					alert(`${shipName} doesn't fit at this location vertically. Please choose a different starting coordinate.`);
+					alert(`${shipName} doesn't fit at this location vertically or the coordinates are occupied. Please choose a different starting coordinate.`);
 				}
 			}
 		} else {
 			alert('Invalid coordinates. Please enter valid coordinates (A-J for X and 1-10 for Y).');
 		}
 	}
+}
+
+function checkCoordinatesOccupied(x, y, length, isHorizontal) {
+	if (isHorizontal) {
+		for (let i = 0; i < length; i++) {
+			const shipX = xCoordinates[xCoordinates.indexOf(x) + i];
+			const shipY = y;
+			const shipLocation = coordinates.find(loc => loc.x === shipX && loc.y === shipY);
+			if (shipLocation.boat !== 'none') {
+				return true; // Coordinates are occupied
+			}
+		}
+	} else {
+		for (let i = 0; i < length; i++) {
+			const shipX = x;
+			const shipY = y + i;
+			const shipLocation = coordinates.find(loc => loc.x === shipX && loc.y === shipY);
+			if (shipLocation.boat !== 'none') {
+				return true; // Coordinates are occupied
+			}
+		}
+	}
+	return false; // Coordinates are not occupied
 }
 
 // Now, initialize the coordinates array and then prompt the user for ship placement for each ship
