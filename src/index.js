@@ -12,13 +12,13 @@ function createShip(name, length, hits, sunk) {
 	// Define a method for the object
 	ship.hit = function () {
 		ship.hits += 1;
-        alert(capitalizeFirstLetter(ship.name) + ' has been hit!');
+        alert((ship.name) + ' has been hit!');
 	};
 
 	ship.isSunk = function () {
 		if (ship.hits === ship.length) {
 			ship.sunk = 'Yes';
-            alert(capitalizeFirstLetter(ship.name) + ' has been sunk!');
+            alert((ship.name) + ' has been sunk!');
 		}
 	};
 
@@ -49,37 +49,45 @@ const yCoordinates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const coordinates = [];
 
 function receiveAttack(x, y) {
-	for (const location of coordinates) {
-		if (location.x === x && location.y === y) {
-			if (location.boat === 'none') {
-				location.attacked = 'yes';
-			} else {
-				// Find the corresponding ship by name and add a hit
-				switch (location.boat) {
-					case 'Aircraft Carrier':
-						aircraftCarrier.hit();
+    for (const location of coordinates) {
+        if (location.x === x && location.y === y) {
+            if (location.attacked === 'yes') {
+                // If the location has already been attacked, do nothing
+                return;
+            }
+
+            location.attacked = 'yes';
+
+            if (location.boat !== 'none') {
+                // Find the corresponding ship by name and add a hit
+                switch (location.boat) {
+                    case 'Aircraft Carrier':
+                        aircraftCarrier.hit();
                         aircraftCarrier.isSunk();
-						break;
-					case 'Battleship':
-						battleship.hit();
+                        break;
+                    case 'Battleship':
+                        battleship.hit();
                         battleship.isSunk();
-						break;
-					case 'Destroyer':
-						destroyer.hit();
+                        break;
+                    case 'Destroyer':
+                        destroyer.hit();
                         destroyer.isSunk();
-						break;
-					case 'Submarine':
-						submarine.hit();
+                        break;
+                    case 'Submarine':
+                        submarine.hit();
                         submarine.isSunk();
-						break;
-					case 'Patrol Boat':
-						patrolBoat.hit();
+                        break;
+                    case 'Patrol Boat':
+                        patrolBoat.hit();
                         patrolBoat.isSunk();
-						break;
-				}
-			}
-		}
-	}
+                        break;
+                }
+
+            } else {
+                alert("It's a miss!");
+            }
+        }
+    }
 }
 
 // Nested for loop to create objects and div elements for every combination of 'x' and 'y'
