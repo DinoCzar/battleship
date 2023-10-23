@@ -93,6 +93,52 @@ function createComputerGameBoard() {
 const playerGameBoard = createPlayerGameBoard();
 const computerGameBoard = createComputerGameBoard();
 
+function randomCoordinate() {
+    // Generate a random x-coordinate (1-10)
+    const x = Math.floor(Math.random() * 10) + 1;
+    // Generate a random y-coordinate (A-J)
+    const y = String.fromCharCode(Math.floor(Math.random() * 10) + 'A'.charCodeAt(0));
+    return { x, y };
+}
+
+function placeComputerShips(computerGameBoard, ships) {
+    for (const ship of ships) {
+        let validPlacement = false;
+        while (!validPlacement) {
+            // Generate a random starting coordinate
+            const { x, y } = randomCoordinate();
+
+            // Check if there's enough space to place the ship horizontally
+            if (x + ship.length - 1 <= 10) {
+                let canPlaceShip = true;
+                // Check each location from the current one to the end
+                for (let i = x; i < x + ship.length; i++) {
+                    const locationToCheck = computerGameBoard.find(loc => loc.x === i && loc.y === y);
+                    if (locationToCheck.boat !== 'none') {
+                        canPlaceShip = false;
+                        break;
+                    }
+                }
+                if (canPlaceShip) {
+                    // Valid placement, update the "boat" property for each location
+                    for (let i = x; i < x + ship.length; i++) {
+                        const locationToPlace = computerGameBoard.find(loc => loc.x === i && loc.y === y);
+                        locationToPlace.boat = ship.name;
+                    }
+                    validPlacement = true;
+                }
+            }
+        }
+    }
+}
+
+// Create an array of computer ships
+const computerShips = [computerAircraftCarrier, computerBattleship, computerDestroyer, computerSubmarine, computerPatrolBoat];
+
+// Automatically place computer ships on the board
+placeComputerShips(computerGameBoard, computerShips);
+
+
 console.log(playerGameBoard)
 console.log(computerGameBoard)
 
