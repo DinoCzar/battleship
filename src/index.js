@@ -41,6 +41,8 @@ function createLocation(x, y) {
     return { x, y, boat: 'none', attacked: 'no' };
 }
 
+const computerContainer = document.querySelector('#computer-container');
+
 function createPlayerGameBoard() {
     const playerGameBoard = [];
     const columns = 10;
@@ -51,10 +53,12 @@ function createPlayerGameBoard() {
             const location = createLocation(x, String.fromCharCode(y));
             playerGameBoard.push(location);
 
-            // Create a div element for each location and set its id
-            const div = document.createElement('div');
-            div.id = location.y + location.x;
-            document.body.appendChild(div); // You can append it to the body or another container as needed.
+            // Create a div element for each location, set its id, and add a CSS class
+            const playerContainer = document.querySelector('#player-container');
+			const div = document.createElement('div');
+            div.id = location.x + location.y;
+            div.classList.add('location'); // Add the CSS class 'location' to the div
+            playerContainer.appendChild(div); // Append the div to the playerContainer
         }
     }
 
@@ -74,6 +78,12 @@ function createComputerGameBoard() {
         for (let y = 'A'.charCodeAt(0); y <= 'J'.charCodeAt(0); y++) {
             const location = createComputerLocation(x, String.fromCharCode(y));
             computerGameBoard.push(location);
+
+            // Create a div element for each location in the computer game board
+            const div = document.createElement('div');
+            div.id = 'computer-' +  location.x + location.y; // Add 'computer-' prefix to the ID
+            div.classList.add('location'); // Add the CSS class 'location' to the div
+            computerContainer.appendChild(div);
         }
     }
 
@@ -83,6 +93,3 @@ function createComputerGameBoard() {
 const playerGameBoard = createPlayerGameBoard();
 const computerGameBoard = createComputerGameBoard();
 
-// Example usage of the playerGameBoard and computerGameBoard:
-console.log(playerGameBoard); // Player's game board with x, y, boat, and attacked properties.
-console.log(computerGameBoard); // Computer's game board with x, y, boat, and attacked properties.
