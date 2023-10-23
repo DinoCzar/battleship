@@ -251,6 +251,14 @@ function computerAttack() {
   }
   
   
+  function checkPlayerShipsSunk() {
+	const allSunk = playerShips.every((ship) => ship.sunk === 'Yes');
+	if (allSunk) {
+	  alert("GAME OVER! COMPUTER WINS!");
+	  // Optionally, you can reset the game or perform any other actions here.
+	}
+  }
+  
   function handlePlayerAttack(location) {
 	if (location.attacked === 'no') {
 	  location.attacked = 'yes';
@@ -264,12 +272,14 @@ function computerAttack() {
 		const ship = computerShips.find((s) => s.name === location.boat);
 		ship.hit();
 		ship.isSunk();
+		checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
 	  }
   
 	  // After handling player's attack, trigger computer's attack.
 	  computerAttack();
 	}
   }
+  
   
   // Add a click event listener to each computer game board div
   computerGameBoard.forEach((location) => {
