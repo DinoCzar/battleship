@@ -228,15 +228,21 @@ const playerShips = [
 placePlayerShips(playerGameBoard, playerShips);
 
 
-let previousComputerAttack = null; // Keep track of the previous computer attack
-let previousHit = null; // Keep track of the previous hit location
+let previousComputerAttacks = []; // Keep track of the previous computer attacks
+let previousHits = []; // Keep track of the previous hit locations
 
 function computerAttack() {
 	if (!gameOver) {
 		let randomPlayerLocation;
 
-		if (previousComputerAttack && previousHit) {
-			const adjacentLocations = getAdjacentLocations(previousHit.x, previousHit.y);
+		if (previousComputerAttacks.length > 0) {
+			let lastHits = previousHits.slice(previousHits.length - 4); // Get the last 4 hits
+			let adjacentLocations = [];
+
+			for (const hit of lastHits) {
+				adjacentLocations = adjacentLocations.concat(getAdjacentLocations(hit.x, hit.y));
+			}
+
 			randomPlayerLocation = adjacentLocations.find((loc) => loc.attacked === 'no');
 		}
 
@@ -249,7 +255,10 @@ function computerAttack() {
 		randomPlayerLocation.attacked = 'yes';
 
 		// Store the previous computer attack for reference.
-		previousComputerAttack = randomPlayerLocation;
+		previousComputerAttacks.push(randomPlayerLocation);
+		if (previousComputerAttacks.length > 4) {
+			previousComputerAttacks.shift(); // Keep the last 4 attacks in the array
+		}
 
 		// Find the corresponding div on the player's game board.
 		const div = document.getElementById(randomPlayerLocation.x + randomPlayerLocation.y);
@@ -264,7 +273,7 @@ function computerAttack() {
 			ship.isSunk();
 			checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
 			// Store the previous hit location for reference.
-			previousHit = randomPlayerLocation;
+			previousHits.push(randomPlayerLocation);
 		}
 
 		if (!gameOver) {
