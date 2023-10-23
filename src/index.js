@@ -227,21 +227,20 @@ const playerShips = [
 // Prompt the player to place each ship
 placePlayerShips(playerGameBoard, playerShips);
 
+
 let previousComputerAttack = null; // Keep track of the previous computer attack
+let previousHit = null; // Keep track of the previous hit location
 
 function computerAttack() {
 	if (!gameOver) {
-		// Generate a random location to attack on the player's game board.
 		let randomPlayerLocation;
 
-		if (previousComputerAttack) {
-			// If the previous attack was a hit, attack an adjacent square to it.
-			const adjacentLocations = getAdjacentLocations(previousComputerAttack.x, previousComputerAttack.y);
+		if (previousComputerAttack && previousHit) {
+			const adjacentLocations = getAdjacentLocations(previousHit.x, previousHit.y);
 			randomPlayerLocation = adjacentLocations.find((loc) => loc.attacked === 'no');
 		}
 
 		if (!randomPlayerLocation) {
-			// If there's no adjacent square to attack, attack a random location.
 			randomPlayerLocation = playerGameBoard.filter((location) => location.attacked === 'no');
 			randomPlayerLocation = randomPlayerLocation[Math.floor(Math.random() * randomPlayerLocation.length)];
 		}
@@ -264,13 +263,12 @@ function computerAttack() {
 			ship.hit();
 			ship.isSunk();
 			checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
+			// Store the previous hit location for reference.
+			previousHit = randomPlayerLocation;
 		}
 
-		// Check if the game is over (all player ships are sunk)
 		if (!gameOver) {
 			// After handling computer's attack, allow the player to make their attack.
-			// The player will be able to attack only if the game is not over.
-			// For example, you can trigger the player's attack by enabling a button or other UI interaction.
 		}
 	}
 }
@@ -279,25 +277,22 @@ function computerAttack() {
 function getAdjacentLocations(x, y) {
 	const adjacentLocations = [];
 
-	// Check north
 	if (y > 1) {
 		adjacentLocations.push(playerGameBoard.find((loc) => loc.x === x && loc.y === y - 1));
 	}
-	// Check south
 	if (y < 10) {
 		adjacentLocations.push(playerGameBoard.find((loc) => loc.x === x && loc.y === y + 1));
 	}
-	// Check west
 	if (x > 'A') {
 		adjacentLocations.push(playerGameBoard.find((loc) => loc.x === String.fromCharCode(x.charCodeAt(0) - 1) && loc.y === y));
 	}
-	// Check east
 	if (x < 'J') {
 		adjacentLocations.push(playerGameBoard.find((loc) => loc.x === String.fromCharCode(x.charCodeAt(0) + 1) && loc.y === y));
 	}
 
 	return adjacentLocations;
 }
+
 
 
 function checkPlayerShipsSunk() {
