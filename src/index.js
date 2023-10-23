@@ -247,6 +247,7 @@ function computerAttack() {
 	  const ship = playerShips.find((s) => s.name === locationToAttack.boat);
 	  ship.hit();
 	  ship.isSunk();
+	  checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
 	}
   }
   
@@ -272,7 +273,6 @@ function computerAttack() {
 		const ship = computerShips.find((s) => s.name === location.boat);
 		ship.hit();
 		ship.isSunk();
-		checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
 	  }
   
 	  // After handling player's attack, trigger computer's attack.
