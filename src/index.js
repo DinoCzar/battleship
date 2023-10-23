@@ -247,7 +247,6 @@ function computerAttack() {
 	  const ship = playerShips.find((s) => s.name === locationToAttack.boat);
 	  ship.hit();
 	  ship.isSunk();
-	  alert(`Computer's attack: ${locationToAttack.boat} has been hit!`);
 	}
   }
   
