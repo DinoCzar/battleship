@@ -228,26 +228,35 @@ const playerShips = [
 placePlayerShips(playerGameBoard, playerShips);
 
 function computerAttack() {
-	// Generate a random location to attack on the player's game board.
-	const randomPlayerLocation = playerGameBoard.filter(location => location.attacked === 'no');
-	const randomIndex = Math.floor(Math.random() * randomPlayerLocation.length);
-	const locationToAttack = randomPlayerLocation[randomIndex];
+	if (!gameOver) {
+	  // Generate a random location to attack on the player's game board.
+	  const randomPlayerLocation = playerGameBoard.filter(location => location.attacked === 'no');
+	  const randomIndex = Math.floor(Math.random() * randomPlayerLocation.length);
+	  const locationToAttack = randomPlayerLocation[randomIndex];
   
-	// Mark the attacked location as 'yes'.
-	locationToAttack.attacked = 'yes';
+	  // Mark the attacked location as 'yes'.
+	  locationToAttack.attacked = 'yes';
   
-	// Find the corresponding div on the player's game board.
-	const div = document.getElementById(locationToAttack.x + locationToAttack.y);
+	  // Find the corresponding div on the player's game board.
+	  const div = document.getElementById(locationToAttack.x + locationToAttack.y);
   
-	if (locationToAttack.boat === 'none') {
-	  div.style.backgroundColor = 'grey';
-	  alert("Computer's attack: It's a miss!");
-	} else {
-	  div.style.backgroundColor = 'red';
-	  const ship = playerShips.find((s) => s.name === locationToAttack.boat);
-	  ship.hit();
-	  ship.isSunk();
-	  checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
+	  if (locationToAttack.boat === 'none') {
+		div.style.backgroundColor = 'grey';
+		alert("Computer's attack: It's a miss!");
+	  } else {
+		div.style.backgroundColor = 'red';
+		const ship = playerShips.find((s) => s.name === locationToAttack.boat);
+		ship.hit();
+		ship.isSunk();
+		checkPlayerShipsSunk(); // Check if player's ships are all sunk after each attack.
+	  }
+  
+	  // Check if the game is over (all player ships are sunk)
+	  if (!gameOver) {
+		// After handling computer's attack, allow the player to make their attack.
+		// The player will be able to attack only if the game is not over.
+		// For example, you can trigger the player's attack by enabling a button or other UI interaction.
+	  }
 	}
   }
   
@@ -268,8 +277,10 @@ function computerAttack() {
 	}
   }
   
+  let gameOver = false; // Add this variable to track the game state
+
   function handlePlayerAttack(location) {
-	if (location.attacked === 'no') {
+	if (!gameOver && location.attacked === 'no') {
 	  location.attacked = 'yes';
 	  const div = document.getElementById('computer-' + location.x + location.y);
   
@@ -284,10 +295,23 @@ function computerAttack() {
 		checkComputerShipsSunk(); // Check if computer's ships are all sunk after each attack.
 	  }
   
-	  // After handling player's attack, trigger computer's attack.
-	  computerAttack();
+	  // Check if the game is over (all computer ships are sunk)
+	  if (!gameOver) {
+		// After handling player's attack, trigger computer's attack.
+		computerAttack();
+	  }
 	}
   }
+  
+  function checkComputerShipsSunk() {
+	const allSunk = computerShips.every((ship) => ship.sunk === 'Yes');
+	if (allSunk) {
+	  alert("GAME OVER! YOU WIN!");
+	  gameOver = true; // Set the game over flag to true
+	  // Optionally, you can reset the game or perform any other actions here.
+	}
+  }
+  
   
   
   // Add a click event listener to each computer game board div
