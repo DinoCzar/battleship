@@ -185,32 +185,7 @@ function receiveAttack(x, y) {
 }
 
 
-// Nested for loop to create objects and div elements for every combination of 'x' and 'y'
-for (const x of xCoordinates) {
-	for (const y of yCoordinates) {
-		const location = gameBoard(x, y, 'none');
-		coordinates.push(location);
 
-		const container = document.querySelector('#container');
-
-		// Create a div element with ID of x+y
-		const div = document.createElement('div');
-		div.id = x + y;
-		div.classList.add('grid'); // Add the CSS class 'grid' to the div
-
-		div.addEventListener('click', function () {
-			if (location.attacked === 'yes') {
-				// If the location has already been attacked, do nothing
-				return;
-			}
-
-			receiveAttack(x, y);
-		});
-
-		// Append the div to the document or another container
-		container.appendChild(div);
-	}
-}
 
 
 module.exports = {
