@@ -228,8 +228,29 @@ const playerShips = [
 placePlayerShips(playerGameBoard, playerShips);
 
 function computerAttack() {
-	console.log('computer attack');
+	// Generate a random location to attack on the player's game board.
+	const randomPlayerLocation = playerGameBoard.filter(location => location.attacked === 'no');
+	const randomIndex = Math.floor(Math.random() * randomPlayerLocation.length);
+	const locationToAttack = randomPlayerLocation[randomIndex];
+  
+	// Mark the attacked location as 'yes'.
+	locationToAttack.attacked = 'yes';
+  
+	// Find the corresponding div on the player's game board.
+	const div = document.getElementById(locationToAttack.x + locationToAttack.y);
+  
+	if (locationToAttack.boat === 'none') {
+	  div.style.backgroundColor = 'grey';
+	  alert("Computer's attack: It's a miss!");
+	} else {
+	  div.style.backgroundColor = 'red';
+	  const ship = playerShips.find((s) => s.name === locationToAttack.boat);
+	  ship.hit();
+	  ship.isSunk();
+	  alert(`Computer's attack: ${locationToAttack.boat} has been hit!`);
+	}
   }
+  
   
   function handlePlayerAttack(location) {
 	if (location.attacked === 'no') {
