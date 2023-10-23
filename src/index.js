@@ -84,7 +84,9 @@ const playerGameBoard = createPlayerGameBoard();
 const computerGameBoard = createComputerGameBoard();
 
 function randomCoordinate() {
-	const x = String.fromCharCode(Math.floor(Math.random() * 10) + 'A'.charCodeAt(0));
+	const x = String.fromCharCode(
+		Math.floor(Math.random() * 10) + 'A'.charCodeAt(0)
+	);
 	const y = Math.floor(Math.random() * 10) + 1;
 	return { x, y };
 }
@@ -96,7 +98,11 @@ function placeComputerShips(computerGameBoard, ships) {
 			const { x, y } = randomCoordinate();
 			if (x.charCodeAt(0) + ship.length - 1 <= 'J'.charCodeAt(0)) {
 				let canPlaceShip = true;
-				for (let i = x.charCodeAt(0); i <= x.charCodeAt(0) + ship.length - 1; i++) {
+				for (
+					let i = x.charCodeAt(0);
+					i <= x.charCodeAt(0) + ship.length - 1;
+					i++
+				) {
 					const locationToCheck = computerGameBoard.find(
 						(loc) => loc.x === String.fromCharCode(i) && loc.y === y
 					);
@@ -106,7 +112,11 @@ function placeComputerShips(computerGameBoard, ships) {
 					}
 				}
 				if (canPlaceShip) {
-					for (let i = x.charCodeAt(0); i <= x.charCodeAt(0) + ship.length - 1; i++) {
+					for (
+						let i = x.charCodeAt(0);
+						i <= x.charCodeAt(0) + ship.length - 1;
+						i++
+					) {
 						const locationToPlace = computerGameBoard.find(
 							(loc) => loc.x === String.fromCharCode(i) && loc.y === y
 						);
@@ -140,19 +150,18 @@ function placePlayerShips(playerGameBoard, ships) {
 				`Do you want to place the ship vertically? (OK for Yes, Cancel for No)`
 			);
 
-			if (
-				x >= 'A' &&
-				x <= 'J' &&
-				y >= 1 &&
-				y <= 10
-			) {
+			if (x >= 'A' && x <= 'J' && y >= 1 && y <= 10) {
 				const xUpper = x.toUpperCase();
 
 				if (horizontal) {
 					// Check if there's enough space to place the ship horizontally
 					if (xUpper.charCodeAt(0) + ship.length - 1 <= 'J'.charCodeAt(0)) {
 						let canPlaceShip = true;
-						for (let i = xUpper.charCodeAt(0); i <= xUpper.charCodeAt(0) + ship.length - 1; i++) {
+						for (
+							let i = xUpper.charCodeAt(0);
+							i <= xUpper.charCodeAt(0) + ship.length - 1;
+							i++
+						) {
 							const locationToCheck = playerGameBoard.find(
 								(loc) => loc.x === String.fromCharCode(i) && loc.y === y
 							);
@@ -162,7 +171,11 @@ function placePlayerShips(playerGameBoard, ships) {
 							}
 						}
 						if (canPlaceShip) {
-							for (let i = xUpper.charCodeAt(0); i <= xUpper.charCodeAt(0) + ship.length - 1; i++) {
+							for (
+								let i = xUpper.charCodeAt(0);
+								i <= xUpper.charCodeAt(0) + ship.length - 1;
+								i++
+							) {
 								const locationToPlace = playerGameBoard.find(
 									(loc) => loc.x === String.fromCharCode(i) && loc.y === y
 								);
@@ -216,29 +229,28 @@ placePlayerShips(playerGameBoard, playerShips);
 
 function handlePlayerAttack(location) {
 	if (location.attacked === 'no') {
-	  location.attacked = 'yes';
-	  const div = document.getElementById('computer-' + location.x + location.y);
-  
-	  if (location.boat === 'none') {
-		div.style.backgroundColor = 'grey';
-		alert("It's a miss!");
-	  } else {
-		div.style.backgroundColor = 'red';
-		const ship = computerShips.find((s) => s.name === location.boat);
-		ship.hit();
-		alert(ship.name + ' has been hit!');
-	  }
+		location.attacked = 'yes';
+		const div = document.getElementById('computer-' + location.x + location.y);
+
+		if (location.boat === 'none') {
+			div.style.backgroundColor = 'grey';
+			alert('Its a miss!');
+		} else {
+			div.style.backgroundColor = 'red';
+			const ship = computerShips.find((s) => s.name === location.boat);
+			ship.hit();
+			ship.isSunk();
+		}
 	}
-  }
-  
-  // Add a click event listener to each computer game board div
-  computerGameBoard.forEach((location) => {
+}
+
+// Add a click event listener to each computer game board div
+computerGameBoard.forEach((location) => {
 	const div = document.getElementById('computer-' + location.x + location.y);
 	div.addEventListener('click', () => {
-	  handlePlayerAttack(location);
+		handlePlayerAttack(location);
 	});
-  });
-  
+});
 
 console.log(playerGameBoard);
 console.log(computerGameBoard);
