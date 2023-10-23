@@ -11,3 +11,10 @@
     display: grid;
     grid-template-columns: repeat(10, 1fr);
 }
+
+.container2 {
+    margin: 30px;
+    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+}
