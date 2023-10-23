@@ -56,7 +56,7 @@ function createPlayerGameBoard() {
             // Create a div element for each location, set its id, and add a CSS class
             const playerContainer = document.querySelector('#player-container');
 			const div = document.createElement('div');
-            div.id = location.x + location.y;
+            div.id = location.y + location.x;
             div.classList.add('location'); // Add the CSS class 'location' to the div
             playerContainer.appendChild(div); // Append the div to the playerContainer
         }
@@ -81,7 +81,7 @@ function createComputerGameBoard() {
 
             // Create a div element for each location in the computer game board
             const div = document.createElement('div');
-            div.id = 'computer-' +  location.x + location.y; // Add 'computer-' prefix to the ID
+            div.id = 'computer-' + location.y + location.x; // Add 'computer-' prefix to the ID
             div.classList.add('location'); // Add the CSS class 'location' to the div
             computerContainer.appendChild(div);
         }
@@ -92,4 +92,7 @@ function createComputerGameBoard() {
 
 const playerGameBoard = createPlayerGameBoard();
 const computerGameBoard = createComputerGameBoard();
+
+console.log(playerGameBoard)
+console.log(computerGameBoard)
 
