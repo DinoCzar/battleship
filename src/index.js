@@ -120,5 +120,70 @@ const computerShips = [computerAircraftCarrier, computerBattleship, computerDest
 
 placeComputerShips(computerGameBoard, computerShips);
 
+function placePlayerShips(playerGameBoard, ships) {
+    for (const ship of ships) {
+        let validPlacement = false;
+
+        while (!validPlacement) {
+            const x = parseInt(prompt(`Enter x-coordinate for ${ship.name} (1-10):`));
+            const y = prompt(`Enter y-coordinate for ${ship.name} (A-J):`);
+            const horizontal = confirm(`Do you want to place the ship vertically? (OK for Yes, Cancel for No)`);
+
+            if (x >= 1 && x <= 10 && y >= 'A' && y <= 'J') {
+                const yUpper = y.toUpperCase();
+
+                if (horizontal) {
+                    // Check if there's enough space to place the ship vertically
+                    if (x + ship.length - 1 <= 10) {
+                        let canPlaceShip = true;
+                        for (let i = x; i < x + ship.length; i++) {
+                            const locationToCheck = playerGameBoard.find(loc => loc.x === i && loc.y === yUpper);
+                            if (locationToCheck.boat !== 'none') {
+                                canPlaceShip = false;
+                                break;
+                            }
+                        }
+                        if (canPlaceShip) {
+                            for (let i = x; i < x + ship.length; i++) {
+                                const locationToPlace = playerGameBoard.find(loc => loc.x === i && loc.y === yUpper);
+                                locationToPlace.boat = ship.name;
+                            }
+                            validPlacement = true;
+                            alert(`${ship.name} has been placed at ${x}${yUpper}`);
+                        }
+                    }
+                } else {
+                    // Check if there's enough space to place the ship vertically
+                    if (String.fromCharCode(yUpper.charCodeAt(0) + ship.length - 1) <= 'J') {
+                        let canPlaceShip = true;
+                        for (let i = yUpper.charCodeAt(0); i < yUpper.charCodeAt(0) + ship.length; i++) {
+                            const locationToCheck = playerGameBoard.find(loc => loc.x === x && loc.y === String.fromCharCode(i));
+                            if (locationToCheck.boat !== 'none') {
+                                canPlaceShip = false;
+                                break;
+                            }
+                        }
+                        if (canPlaceShip) {
+                            for (let i = yUpper.charCodeAt(0); i < yUpper.charCodeAt(0) + ship.length; i++) {
+                                const locationToPlace = playerGameBoard.find(loc => loc.x === x && loc.y === String.fromCharCode(i));
+                                locationToPlace.boat = ship.name;
+                            }
+                            validPlacement = true;
+                            alert(`${ship.name} has been placed at ${x}${yUpper}`);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Create an array of player ships
+const playerShips = [playerAircraftCarrier, playerBattleship, playerDestroyer, playerSubmarine, playerPatrolBoat];
+
+// Prompt the player to place each ship
+placePlayerShips(playerGameBoard, playerShips);
+
+
 console.log(playerGameBoard);
 console.log(computerGameBoard);
