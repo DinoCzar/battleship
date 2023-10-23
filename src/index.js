@@ -214,5 +214,31 @@ const playerShips = [
 // Prompt the player to place each ship
 placePlayerShips(playerGameBoard, playerShips);
 
+function handlePlayerAttack(location) {
+	if (location.attacked === 'no') {
+	  location.attacked = 'yes';
+	  const div = document.getElementById('computer-' + location.x + location.y);
+  
+	  if (location.boat === 'none') {
+		div.style.backgroundColor = 'grey';
+		alert("It's a miss!");
+	  } else {
+		div.style.backgroundColor = 'red';
+		const ship = computerShips.find((s) => s.name === location.boat);
+		ship.hit();
+		alert(ship.name + ' has been hit!');
+	  }
+	}
+  }
+  
+  // Add a click event listener to each computer game board div
+  computerGameBoard.forEach((location) => {
+	const div = document.getElementById('computer-' + location.x + location.y);
+	div.addEventListener('click', () => {
+	  handlePlayerAttack(location);
+	});
+  });
+  
+
 console.log(playerGameBoard);
 console.log(computerGameBoard);
